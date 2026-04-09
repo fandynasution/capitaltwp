@@ -1,3 +1,36 @@
 *.psd filter=lfs diff=lfs merge=lfs -text
 *.bmp filter=lfs diff=lfs merge=lfs -text
 *.BMP filter=lfs diff=lfs merge=lfs -text
+# Pastikan semua file kode menggunakan LF (Linux style)
+* text=auto eol=lf
+# Khusus untuk file batch Windows, biarkan CRLF
+*.bat text eol=crlf
+# Khusus untuk file PowerShell
+*.ps1 text eol=crlf
+# File PHP, JS, CSS, HTML, dll tetap LF
+*.php text eol=lf
+*.js text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+*.vue text eol=lf
+# File konfigurasi dan teks
+*.md text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.xml text eol=lf
+*.env text eol=lf
+# Binary files jangan diubah line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+*.gz binary
+*.tar binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary

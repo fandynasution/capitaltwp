@@ -61,7 +61,7 @@
 		                        <input type="text" class="form-control" name="angka" id="angka" readonly="readonly" />
 		                    </div>
 		                    <div class="col-10">
-		                        <input type="text" class="form-control" name="pre" id="pre" readonly="readonly" hidden />
+		                        <input type="text" class="form-control" name="pre" id="pre" readonly="readonly" hidden/>
 		                    </div>
 	                    </div>
 	                    <div class="form-group row">
@@ -392,25 +392,27 @@
 
 						if (tenant_no !== '') {
 							var site_url = "{{ url('ticket/getLotNo') }}";
+
 							$.post(site_url, {
 								"_token": "{{ csrf_token() }}",
 								tenant_no: tenant_no
 							}, function(data, status) {
+
 								$("#lot_no").empty().append(data);
-								var site_url2 = "{{ url('ticket/getTicketNew') }}" + "/" + ent + "/" + prj;
+
+								var site_url2 = "{{ url('ticket/getTicketNew') }}/" + ent + "/" + prj;
+
 								$.get(site_url2, {
 									"_token": "{{ csrf_token() }}",
 									ent: ent,
 									prj: prj
-								}, function(datas, status){
-									var prefix = datas;
-									console.log("Prefix:", prefix);
-									$.getJSON("{{url('/ticket/getTicketPrefix')}}" + "/" + ent + "/" + datas, function (datas2){
-										$('#angka').val(datas2);
-										$('#pre').val(prefix);
-									});
+								}).then(function(datas) {
+									console.log('aaa');
+									$('#angka').val(datas); // sekalian isi kalau perlu
 								});
+
 							});
+
 						} else {
 							$("#lot_no").empty();
 							$("#floor").val(null);

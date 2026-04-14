@@ -12,6 +12,7 @@ class TicketController extends Controller
     {
         $buss_id = Session::get('business_no');
         $tenant_no = Session::get('tenant_df');
+        $project_no = Session::get('project_no');
         $crit = array(
             'business_no' => $buss_id,
             'tenant_no'   => $tenant_no
@@ -22,7 +23,7 @@ class TicketController extends Controller
         // var_dump($buss_id);exit;
         $combo_tenant='';
         if($data_tenancy){
-            $combo_tenant = $this->get_combo($buss_id, $data_tenancy[0]->id);
+            $combo_tenant = $this->get_combo($buss_id, $data_tenancy[0]->id, $project_no);
         }
 
         $crit_spec = array(
@@ -94,18 +95,17 @@ class TicketController extends Controller
                     ->get();
         if(!empty($data)) {
             foreach ($data as $key) {                    
-                $list = $key->doc_prefix;
+                $list = $key->complain_seq_no;
             }
             echo($list);
         }
     }
 
-    public function getTicketPrefix($ent="", $prefix="")
+    public function getTicketPrefix($ent="")
     {
         // echo date("Y");
         $crit_cat = array(
             'entity_cd' => $ent,
-            'prefix' => $prefix,
             'year'  => date("Y")
         );
         $data_cat = DB::connection('WINDASLIVE')
@@ -116,10 +116,10 @@ class TicketController extends Controller
         echo ($next_doc_no);
     }
 
-    function get_combo($business_no = "", $selected_id = "")
+    function get_combo($business_no = "", $selected_id = "", $project_no = "")
     {
         $where = array('business_no'=> $business_no,
-                'project_no'=>'0002');
+                'project_no'=>'JSE01');
 
         $query = DB::table('pm_tenancy')->where($where)->get();
         $combo[] = '<option></option>';
@@ -427,7 +427,7 @@ class TicketController extends Controller
 
             $dataopen = DB::connection('WINDASLIVE')
                 ->table('mgr.cf_document_ctl')
-                ->where(['entity_cd' => $entity, 'prefix' => $pre])
+                ->where(['entity_cd' => $entity])
                 ->get();
             if ($dataopen->isEmpty()) {
                 throw new \Exception("Document control tidak ditemukan untuk $entity / $pre");
@@ -449,19 +449,19 @@ class TicketController extends Controller
             $year = date('y');
             $month = date('m');
 
-            if (!$id) {
-                if (strpos($typeformat2, 'PP') !== false) $typeformat2 = str_replace('PP', $pre, $typeformat2);
-                if (strpos($typeformat2, 'YY') !== false) $typeformat2 = str_replace('YY', $year, $typeformat2);
-                if (strpos($typeformat2, 'MM') !== false) $typeformat2 = str_replace('MM', $month, $typeformat2);
-                if (strpos($typeformat2, 'N') !== false) {
-                    $countN = substr_count($typeformat2, "N");
-                    $del = trim($typeformat2, "N");
-                    $change = str_pad($number, $countN, '0', STR_PAD_LEFT);
-                    $typeformat2 = $del . $change;
-                }
-            } else  {
+            // if (!$id) {
+            //     if (strpos($typeformat2, 'PP') !== false) $typeformat2 = str_replace('PP', $pre, $typeformat2);
+            //     if (strpos($typeformat2, 'YY') !== false) $typeformat2 = str_replace('YY', $year, $typeformat2);
+            //     if (strpos($typeformat2, 'MM') !== false) $typeformat2 = str_replace('MM', $month, $typeformat2);
+            //     if (strpos($typeformat2, 'N') !== false) {
+            //         $countN = substr_count($typeformat2, "N");
+            //         $del = trim($typeformat2, "N");
+            //         $change = str_pad($number, $countN, '0', STR_PAD_LEFT);
+            //         $typeformat2 = $del . $change;
+            //     }
+            // } else  {
                 $typeformat2 = $number;
-            }
+            // }
 
             // --- log nomor tiket ---
             \Log::info('Generated complain_no', ['complain_no' => $typeformat2]);
@@ -641,7 +641,7 @@ class TicketController extends Controller
             if (!empty($dataspec)){
                 $email = $dataspec[0]->email_helpdesk;
             } else {
-                $email = 'deska.priyanti@ifca.co.id';
+                $email = 'abdul.kahfi@ifca.co.id';
             }
             $body = "";
             $body.= '<h3>Hi Helpdesk, </h3>';

@@ -10333,6 +10333,8 @@ body.nav-shown { overflow: hidden; }
 
 .nk-sidebar.is-dark { background: #101924; border-left-color: #203247; }
 
+.nk-sidebar.is-capital { background: #748191; border-left-color: #203247; }
+
 .nk-sidebar.is-theme { background: #29347a; border-left-color: #3644a0; }
 
 .nk-sidebar-overlay { position: fixed; top: 0; right: 0; bottom: 0; left: 0; background: rgba(16, 25, 36, 0.4); z-index: 600; animation: overlay-fade-in .4s ease 1; }

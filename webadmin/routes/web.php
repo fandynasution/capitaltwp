@@ -52,13 +52,6 @@ Route::group(['middleware' => ['check-auth', 'revalidate']], function () {
     Route::post('/dash/dlpdf', [Dash::class, 'generatepdf']);
     Route::post('/dash/data/ticket', [Dash::class, 'getTableTicket']);
     Route::get('/dash/export/{nm?}', [Dash::class, 'export']);
-    // Route::get('/dash/admin/{param?}', [Dash::class, 'dash_admin']);
-    // Route::get('/dash/tenant/{param?}', [Dash::class, 'dash_tenant']);
-    // Route::post('/dash/data/admin/ot', [Dash::class, 'getTableOT']);
-    // Route::post('/dash/data/admin/ticket', [Dash::class, 'getTableTicket']);
-    // Route::post('/dash/data/admin/application', [Dash::class, 'getTableApp']);
-    // Route::post('/dash/zoom/debtor', [Dash::class, 'zoom_debtor']);
-    // Route::get('/dash/admin/show_pdf/{param?}', [Dash::class, 'show_pdf']);
 
     // //AccountController
     Route::view('/account/profile', 'account/profile');
@@ -90,36 +83,6 @@ Route::group(['middleware' => ['check-auth', 'revalidate']], function () {
     Route::post('/overtime/posting/approve', [Overtime::class, 'approve_ot']);
     Route::post('/overtime/posting/cancel', [Overtime::class, 'cancel_ot']);
 
-    // //GroupController
-    // Route::view('/group', 'group.index');
-    // Route::post('/group/all', [Group::class, 'getTable']);
-    // Route::view('/group/form', 'group.form');
-    // Route::get('/group/id/{id}', [Group::class, 'getByID']);
-    // Route::post('/group/save', [Group::class, 'save']);
-    // Route::post('/group/delete', [Group::class, 'delete']);
-
-    // //MenuController
-    // Route::view('/menu', 'menu/index');
-    // Route::get('/menu/all', [Menu::class, 'getTable']);
-    // Route::get('/menu/form', [Menu::class, 'form']);
-    // Route::get('/menu/id/{id}', [Menu::class, 'getByID']);
-    // Route::post('/menu/save', [Menu::class, 'save']);
-    // //Assign Menu
-    // Route::get('/menu/assign', [Menu::class, 'assign']);
-    // Route::get('/menu/assign/table', [Menu::class, 'getTableAssign']);
-    // Route::post('/menu/assign/list', [Menu::class, 'getListAssign']);
-    // Route::post('/menu/assign/save', [Menu::class, 'saveAssign']);
-
-    // //ProjectController
-    // Route::get('/projects', [Project::class, 'index']);
-    // Route::get('/projects/form/{id}', [Project::class, 'addproject']);
-    // Route::get('/projects/form/{type}/{id}', [Project::class, 'addproject']);
-    // Route::post('/projects/zoom_entity/', [Project::class, 'zoom_entity']);
-    // Route::post('/projects/email_profile/', [Project::class, 'email_profile']);
-    // Route::post('/projects/zoom_project/', [Project::class, 'zoom_project']);
-    // Route::post('/projects/save_regist/', [Project::class, 'save_regist']);
-    // Route::get('/projects/getbyid/{id}', [Project::class, 'getById']);
-    // Route::post('/projects/savepic', [Project::class, 'savePic']);
 
     //NewsPromoController
     Route::view('/news', 'news.index');

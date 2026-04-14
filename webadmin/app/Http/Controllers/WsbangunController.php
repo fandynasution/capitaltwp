@@ -106,28 +106,15 @@ class WsbangunController extends Controller
     }
     public function new_business($value="")
     {
-        // var_dump($value);
         $entity = $value["entity_cd"];
         $project = $value["project_no"];
         $tenant_no = $value["tenant_no"];
         try{
-            // $result = $this->m_wsbangun->get_tenant_by_id($entity, $project, $tenant_no);
             $result = DB::connection('ifcapb')->select("SELECT * FROM mgr.tenant_login WHERE entity_cd='$entity' AND rtrim(project_no)='$project' AND debtor_acct='$tenant_no'");
-            //var_dump($result);
-            // var_dump($entity);
-            // var_dump($project);
-            // var_dump($tenant_no);
-            // var_dump($result);
-            // exit();
             if(!empty($result)) {
                 $id_business = $result[0]->business_id;
                 $crit1 = array('business_no'=>$id_business);
-                // $check_tenant = $this->m_tenant->get_by_criteria($crit1);            
                 $check_tenant = DB::connection('ifcaadm')->table('tenant')->where($crit1)->get();
-                // var_dump('a');
-                // var_dump($check_tenant);
-                // var_dump(empty($check_tenant));
-                // exit();
                 if(empty($check_tenant)||count($check_tenant)==0) {
                     $data1 = array(
                         'name'=>$result[0]->name,
@@ -140,9 +127,6 @@ class WsbangunController extends Controller
                         'business_no'=>$result[0]->business_id,
                         'tenant_no_df'=>$tenant_no
                     );
-                    // var_dump($data1);exit();
-                    // $this->m_tenant->insert($data1);
-                    // var_dump('b');
                     DB::connection('ifcaadm')
                     ->table('tenant')
                     ->insert($data1);
@@ -152,7 +136,7 @@ class WsbangunController extends Controller
                     // var_dump($data_tenant);exit();
                     if(!empty($data_tenant)) {
                         $id_tenant = $data_tenant[0]->id;
-                        $password = 'windas123';
+                        $password = 'Capital123';
                         $data2 = array(
                             'name'=>$data_tenant[0]->name,
                             'email'=>$data_tenant[0]->email,
@@ -250,7 +234,7 @@ class WsbangunController extends Controller
                     $cnt_login = DB::connection('ifcaadm')->table('all_login')->where($crit2)->get();
                     if(count($cnt_login)<1) {
                         // var_dump("KOSONG");
-                        $password = 'windas123';
+                        $password = 'Capital123';
                         $data2 = array(
                             'name'=>$result[0]->name,
                             'email'=>$result[0]->email_addr,

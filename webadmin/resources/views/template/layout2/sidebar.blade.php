@@ -1,4 +1,4 @@
-<div class="nk-sidebar" data-content="sidebarMenu">
+<div class="nk-sidebar is-capital" data-content="sidebarMenu">
     <div class="nk-sidebar-inner" data-simplebar>
         <ul class="nk-menu nk-menu-md">
             <li class="nk-menu-heading">

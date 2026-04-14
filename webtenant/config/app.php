@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://twp.trinitytower.co.id/webtenant'),
+    'url' => env('APP_URL', 'https://demo.property365.co.id:4421/capital/webtenant'),
 
     'asset_url' => env('ASSET_URL', null),
 

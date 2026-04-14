@@ -42,7 +42,7 @@ class OvertimeController extends Controller
                 INNER JOIN mgr.cf_entity b ON a.entity_cd=b.entity_cd
                 INNER JOIN mgr.pl_project c ON a.entity_cd=c.entity_cd AND a.project_no=c.project_no
                 WHERE a.business_id='$business_no' 
-                AND a.project_no='0002'";
+                AND a.project_no='JSE01'";
         
         $query = DB::connection('WINDASLIVE')->select($sql);
 
@@ -102,7 +102,7 @@ class OvertimeController extends Controller
     public function getComboAC_lottenant($tenant = '', $selected_id = '', $where = '')
     {
         
-        $sql = "SELECT DISTINCT a.entity_cd, a.project_no, a.tenant_no as debtor_acct, a.lot_no, b.descs FROM mgr.pm_tenant_lot (NOLOCK) a INNER JOIN mgr.pm_lot (NOLOCK) b ON a.entity_cd=b.entity_cd AND a.project_no=b.project_no AND a.lot_no=b.lot_no where a.entity_cd='0001' and a.project_no='0002'";
+        $sql = "SELECT DISTINCT a.entity_cd, a.project_no, a.tenant_no as debtor_acct, a.lot_no, b.descs FROM mgr.pm_tenant_lot (NOLOCK) a INNER JOIN mgr.pm_lot (NOLOCK) b ON a.entity_cd=b.entity_cd AND a.project_no=b.project_no AND a.lot_no=b.lot_no where a.entity_cd='0001' and a.project_no='JSE01'";
         if(!empty($where))
         {
             $sql .=" AND a.lot_no IN ( $where ) ";

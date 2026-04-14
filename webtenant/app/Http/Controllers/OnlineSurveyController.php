@@ -10,82 +10,91 @@ use Validator;
 class OnlineSurveyController extends Controller
 {
 	public function index()
-	{    
+    {    
+        $business_no = Session::get('business_no');
+
+        // Ambil semua publish aktif
         $dataPub = DB::table('pm_survey_publish')
-        	->where('publishdate', '<=', date("Y-m-d"))
-        	->where('expireddate', '>=', date("Y-m-d"))
-        	->where('flag_publish', 1)
-        	->get();
-        // var_dump($dataPub);
+            ->where('publishdate', '<=', date("Y-m-d"))
+            ->where('expireddate', '>=', date("Y-m-d"))
+            ->where('flag_publish', 1)
+            ->get();
+
         $lsP = '';
-		$cnR = 0;     
-        if(!empty($dataPub)) {
+        $cnR = 0;     
+
+        // 🔥 Ambil semua publish_id yang SUDAH dijawab user (sekali query saja)
+        $answered = DB::table('pm_survey_respon')
+            ->where('user_id', $business_no)
+            ->pluck('publish_id')
+            ->toArray();
+
+        if (!empty($dataPub)) {
             foreach ($dataPub as $publish) 
             {
-            	$business_no = Session::get('business_no');
-            	$id = $publish->id;
-            	$sql = "SELECT count(1) as cnt FROM pm_survey_respon WHERE user_id='$business_no' AND publish_id='$id'";
-            	$dtC = DB::select($sql);
-                // $cnR = $dtC->cnt;
-                // if($cnR==0)
-                // {
-                    $lsP.='<label class="control-label">'.$publish->title.'</label>';
-                    $crit = array('publish_id' => $publish->id);
+                $id = $publish->id;
 
-                    $dataSur = DB::table('pm_survey_hd')
-                    	->where($crit)
-                    	->get();
-                    //var_dump($dataSur);
-                    if(!empty($dataSur))
-                    {
-                        $lsP.='<form role="form" method="post" name="f'.$publish->id.'" action="" id="frm'.$publish->id.'">';
-                        // var_dump($lsP);
-                        foreach ($dataSur as $k=>$survey) {
-                            $lsP.='<div class="form-group col-sm-10">'.$survey->content;
-                            $lsP.='<input type="hidden" name="s[]" value="'.$survey->id.'">';
-                            // var_dump($lsP);
-                            $crit = array('survey_id' => $survey->id);
+                // ❌ Kalau sudah pernah isi → skip
+                if (in_array($id, $answered)) {
+                    continue;
+                }
 
-                            $dataOpt = DB::table('pm_survey_dt')
-                            	->where($crit)
-                            	->get();
-                            // var_dump($dataOpt);
-                            if(!empty($dataOpt))
-                            {
-                                foreach ($dataOpt as $option) {
-                                    $lsP.='<div class="radio col-sm-10"><label>';
-                                    $lsP.='<input type="radio" name="oR['.$k.']" data-ada="true" value="'.$option->line_no.'"/> ';
-                                    $lsP.=' '.$option->options.'</label>';
-                                    if($option->flag_remark==1){
-                                        $lsP.='<textarea class="form-control col-sm-10" rows="3" id="remarks" name="remarks" ></textarea>';
-                                    }
-                                    $lsP.='</div>';
-                                    // var_dump($lsP);
+                // ✅ Kalau belum isi → tampilkan
+                $lsP .= '<label class="control-label">'.$publish->title.'</label>';
+
+                $dataSur = DB::table('pm_survey_hd')
+                    ->where('publish_id', $publish->id)
+                    ->get();
+
+                if (!empty($dataSur))
+                {
+                    $lsP .= '<form role="form" method="post" name="f'.$publish->id.'" action="" id="frm'.$publish->id.'">';
+
+                    foreach ($dataSur as $k => $survey) {
+
+                        $lsP .= '<div class="form-group col-sm-10">'.$survey->content;
+                        $lsP .= '<input type="hidden" name="s[]" value="'.$survey->id.'">';
+
+                        $dataOpt = DB::table('pm_survey_dt')
+                            ->where('survey_id', $survey->id)
+                            ->get();
+
+                        if (!empty($dataOpt))
+                        {
+                            foreach ($dataOpt as $option) {
+
+                                $lsP .= '<div class="radio col-sm-10"><label>';
+                                $lsP .= '<input type="radio" name="oR['.$k.']" data-ada="true" value="'.$option->line_no.'"/> ';
+                                $lsP .= ' '.$option->options.'</label>';
+
+                                if ($option->flag_remark == 1) {
+                                    $lsP .= '<textarea class="form-control col-sm-10" rows="3" name="remarks"></textarea>';
                                 }
-                                $lsP.='</div>';
-                            }                          
-                        }
-                        $lsP.='<input name="id" type="hidden" value="'.$publish->id.'"/><input name="q" type="hidden" value="'.$k.'"/>';
-                        // var_dump($lsP);
-                    }
-                    $lsP.='<div style="text-align:right;margin-right: 50px;margin-top: 20px">';
-                    $lsP.='<button type="button" id="btnSave'.$publish->id.'" data-p="'.$publish->id.'" data-q="'.$k.'" class="btn btn-primary">Submit</button>';
-                    $lsP.='</div></form>';
 
-                // }
+                                $lsP .= '</div>';
+                            }
+
+                            $lsP .= '</div>';
+                        }
+                    }
+
+                    $lsP .= '<input name="id" type="hidden" value="'.$publish->id.'"/>';
+                    $lsP .= '<input name="q" type="hidden" value="'.$k.'"/>';
+
+                    $lsP .= '<div style="text-align:right;margin-right: 50px;margin-top: 20px">';
+                    $lsP .= '<button type="button" id="btnSave'.$publish->id.'" data-p="'.$publish->id.'" data-q="'.$k.'" class="btn btn-primary">Submit</button>';
+                    $lsP .= '</div></form>';
+                }
             }
         }
-        // var_dump($lsP);
 
         $content = array(
-        	//'link_cal' => $link_cal,
-        	'dP' => $lsP,
-        	'cS' => $cnR,
-        	//'error' => $data
+            'dP' => $lsP,
+            'cS' => $cnR,
         );
-        // var_dump($content);
+
         return view('online_survey/index', $content);
-	}
+    }
 
     public function save(Request $request)
     {
@@ -105,7 +114,7 @@ class OnlineSurveyController extends Controller
                 'respon' => $request->oR[$i],
                 'user_id' => $business_no,
                 'email_addr' => $email,
-                'remark' => null,
+                'remark' => $request->remarks ?? null,
                 'date_created' => date('Y-m-d H:i:s'),
                 'audit_user' => '',
                 'audit_date' => date('Y-m-d H:i:s')

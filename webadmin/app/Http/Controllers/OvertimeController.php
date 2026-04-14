@@ -90,7 +90,7 @@ class OvertimeController extends Controller
        
         $sqlad = "SELECT entity_cd, entity_name from mgr.cf_entity (nolock)";        
         $dtENT = DB::connection('ifcapb')->select($sqlad); 
-        $sql = "SELECT project_no, descs from mgr.pl_project (nolock) where project_no='0002'";        
+        $sql = "SELECT project_no, descs from mgr.pl_project (nolock)";        
         $dtpro = DB::connection('ifcapb')->select($sql);    
         $content = array(
             'dataent'=>$dtENT,
@@ -373,197 +373,197 @@ class OvertimeController extends Controller
             'dtexec'=> $dtexec
         ]);
     }
-    public function save_old(Request $request)
-    {
-        // var_dump($request->all());//exit;
-        $bill_debtor='';$dtexec=null;
-        $postdate='';
-        $rowid_hd='';
-        $project = $request->project;
-        $entity = $request->entity;
-        $bill_debtor_acct = $request->bill_debtor_acct;
-        // $business_id = $request->business_id;
-        $postdate = $request->post_date;
-        $startperiod = $request->start;
-        $endperiod = $request->end;
-        $remarks = $request->remarks;
-        $today = date('Y M d H:i:s');
-        $time1 = strtotime($postdate);
-        $postdate_new = date('Y M d H:i:s',$time1);
+    // public function save_old(Request $request)
+    // {
+    //     // var_dump($request->all());//exit;
+    //     $bill_debtor='';$dtexec=null;
+    //     $postdate='';
+    //     $rowid_hd='';
+    //     $project = $request->project;
+    //     $entity = $request->entity;
+    //     $bill_debtor_acct = $request->bill_debtor_acct;
+    //     // $business_id = $request->business_id;
+    //     $postdate = $request->post_date;
+    //     $startperiod = $request->start;
+    //     $endperiod = $request->end;
+    //     $remarks = $request->remarks;
+    //     $today = date('Y M d H:i:s');
+    //     $time1 = strtotime($postdate);
+    //     $postdate_new = date('Y M d H:i:s',$time1);
 
-        $cek_fji_billdate = explode('-', $postdate);
-        // var_dump($cek_fji_billdate);exit();
-        $time2 = strtotime($startperiod);
-        $startperiod = date('Y M d H:i:s',$time2);
+    //     $cek_fji_billdate = explode('-', $postdate);
+    //     // var_dump($cek_fji_billdate);exit();
+    //     $time2 = strtotime($startperiod);
+    //     $startperiod = date('Y M d H:i:s',$time2);
 
-        $time3 = strtotime($endperiod." 23:59:59");
-        $endperiod = date('Y M d H:i:s',$time3);
-        $startmysql = date('Y-m-d H:i:s',$time2);
-        $endmysql = date('Y-m-d H:i:s',$time3);
-        try { 
-            // $sql = "SELECT distinct bill_debtor_acct,inv_group,currency_cd,min_hours_type,min_over_hours,credit_terms,trx_type from mgr.v_ot_debtor_tenancy where entity_cd='$entity' and project_no='$project' and debtor_acct='$bill_debtor_acct' ";     
-            $dt_OTspec = DB::connection('ifcaadm')->select('SELECT * from mgr.ot_spec');
-            $trx_type = $dt_OTspec[0]->trx_type;
-            $sql = "SELECT distinct bill_debtor_acct,inv_group,currency_cd,min_hours_type,min_over_hours,credit_terms from mgr.v_ot_debtor_tenancy where entity_cd='$entity' and project_no='$project' and debtor_acct='$bill_debtor_acct' ";    
-            $dthours = DB::connection('ifcapb')->select($sql);
-            // exit();
-            if(!empty($dthours)){
-                $bill_debtor = $dthours[0]->bill_debtor_acct;
-                $inv_group = $dthours[0]->inv_group;
-                $currency_cd = $dthours[0]->currency_cd;
-                $min_hours_type = $dthours[0]->min_hours_type;
-                $min_over_hours = $dthours[0]->min_over_hours;
-                $credit_terms = $dthours[0]->credit_terms;
+    //     $time3 = strtotime($endperiod." 23:59:59");
+    //     $endperiod = date('Y M d H:i:s',$time3);
+    //     $startmysql = date('Y-m-d H:i:s',$time2);
+    //     $endmysql = date('Y-m-d H:i:s',$time3);
+    //     try { 
+    //         // $sql = "SELECT distinct bill_debtor_acct,inv_group,currency_cd,min_hours_type,min_over_hours,credit_terms,trx_type from mgr.v_ot_debtor_tenancy where entity_cd='$entity' and project_no='$project' and debtor_acct='$bill_debtor_acct' ";     
+    //         $dt_OTspec = DB::connection('ifcaadm')->select('SELECT * from mgr.ot_spec');
+    //         $trx_type = $dt_OTspec[0]->trx_type;
+    //         $sql = "SELECT distinct bill_debtor_acct,inv_group,currency_cd,min_hours_type,min_over_hours,credit_terms from mgr.v_ot_debtor_tenancy where entity_cd='$entity' and project_no='$project' and debtor_acct='$bill_debtor_acct' ";    
+    //         $dthours = DB::connection('ifcapb')->select($sql);
+    //         // exit();
+    //         if(!empty($dthours)){
+    //             $bill_debtor = $dthours[0]->bill_debtor_acct;
+    //             $inv_group = $dthours[0]->inv_group;
+    //             $currency_cd = $dthours[0]->currency_cd;
+    //             $min_hours_type = $dthours[0]->min_hours_type;
+    //             $min_over_hours = $dthours[0]->min_over_hours;
+    //             $credit_terms = $dthours[0]->credit_terms;
                
-            }else{
-                $msg = "Can not get data from v_ot_debtor_tenancy.";
-                $st = 'Fail';
-                return response()->json([
-                    'status' => $st,
-                    'pesan' => $msg
-                ]);
-                exit();
-            }
-            $dt_fji = array(
-                'entity_cd' => $entity,
-                'project_no'=>$project,
-                'debtor_acct'=>$bill_debtor_acct,
-                'inv_group'=>$inv_group,
-                'trx_type'=>$trx_type,
-                'bill_date'=>$postdate_new,
-                'currency_cd'=>$currency_cd,
-                'remarks'=>$remarks,
-                'status'=>'N',
-                'audit_user'=>'TWP',
-                'audit_date'=>$today,
-                'min_hours_type'=>$min_hours_type,
-                'min_over_hours'=>$min_over_hours,
-                'bill_amt'=>0,
-                'flag_round'=>'N',
-                'credit_terms'=>$credit_terms,
-                'start_period'=>$startperiod,
-                'end_period'=>$endperiod
-            );
-            DB::connection('ifcapb')
-                    ->table('mgr.ot_trx_fji')
-                    ->insert($dt_fji);
-                $sql = "SELECT * from mgr.ot_trx_fji where entity_cd='$entity' and project_no='$project' and debtor_acct='$bill_debtor_acct' and month(bill_date) = '$cek_fji_billdate[1]' and year(bill_date) ='$cek_fji_billdate[2]'";     
-                $dt_id_fji = DB::connection('ifcapb')->select($sql);
+    //         }else{
+    //             $msg = "Can not get data from v_ot_debtor_tenancy.";
+    //             $st = 'Fail';
+    //             return response()->json([
+    //                 'status' => $st,
+    //                 'pesan' => $msg
+    //             ]);
+    //             exit();
+    //         }
+    //         $dt_fji = array(
+    //             'entity_cd' => $entity,
+    //             'project_no'=>$project,
+    //             'debtor_acct'=>$bill_debtor_acct,
+    //             'inv_group'=>$inv_group,
+    //             'trx_type'=>$trx_type,
+    //             'bill_date'=>$postdate_new,
+    //             'currency_cd'=>$currency_cd,
+    //             'remarks'=>$remarks,
+    //             'status'=>'N',
+    //             'audit_user'=>'TWP',
+    //             'audit_date'=>$today,
+    //             'min_hours_type'=>$min_hours_type,
+    //             'min_over_hours'=>$min_over_hours,
+    //             'bill_amt'=>0,
+    //             'flag_round'=>'N',
+    //             'credit_terms'=>$credit_terms,
+    //             'start_period'=>$startperiod,
+    //             'end_period'=>$endperiod
+    //         );
+    //         DB::connection('ifcapb')
+    //                 ->table('mgr.ot_trx_fji')
+    //                 ->insert($dt_fji);
+    //             $sql = "SELECT * from mgr.ot_trx_fji where entity_cd='$entity' and project_no='$project' and debtor_acct='$bill_debtor_acct' and month(bill_date) = '$cek_fji_billdate[1]' and year(bill_date) ='$cek_fji_billdate[2]'";     
+    //             $dt_id_fji = DB::connection('ifcapb')->select($sql);
 
-                if(empty($dt_id_fji)){
-                    $msg = "Save failed: Can't get rowid from mgr.ot_trx_fji.";
-                    $st = 'Fail';
-                    return response()->json([
-                        'status' => $st,
-                        'pesan' => $msg
-                    ]);
-                    exit();
-                }
-                $rowid_hd=$dt_id_fji[0]->rowID;
-                $postdate_new = $dt_id_fji[0]->bill_date;
-                $postdate = date('d-M-Y',strtotime($postdate_new));
-                $postdate_new = date('Y M d H:i:s',strtotime($postdate_new));
+    //             if(empty($dt_id_fji)){
+    //                 $msg = "Save failed: Can't get rowid from mgr.ot_trx_fji.";
+    //                 $st = 'Fail';
+    //                 return response()->json([
+    //                     'status' => $st,
+    //                     'pesan' => $msg
+    //                 ]);
+    //                 exit();
+    //             }
+    //             $rowid_hd=$dt_id_fji[0]->rowID;
+    //             $postdate_new = $dt_id_fji[0]->bill_date;
+    //             $postdate = date('d-M-Y',strtotime($postdate_new));
+    //             $postdate_new = date('Y M d H:i:s',strtotime($postdate_new));
                 
-                $sql = "SELECT TIMESTAMPDIFF(HOUR,  start_overtime, end_overtime) as hour_diff, TIMESTAMPDIFF ( minute , start_overtime, end_overtime ) as min_diff,v_ot_tenancy.* from v_ot_tenancy where entity_cd='$entity' and project_no='$project' and tenant_no = '$bill_debtor' and approved='N'  and status ='A' and start_overtime >= '$startmysql' and start_overtime <= '$endmysql'";   
-                // var_dump($sql);exit();     
-                $dt_OT = DB::connection('ifcaadm')->select($sql);
-                if(!empty($dt_OT)){
-                    $dt_fji_dtl = [];$id_ot = [];$no=1;
-                    foreach ($dt_OT as $key) {
-                        $sql = "SELECT mgr.pm_lot.level_no,mgr.pm_lot.over_ot_cd,ott.trx_type , mgr.pm_lot.zone_ot_cd 
-                            from mgr.pm_lot
-                            inner join mgr.ot_type ott (nolock) 
-                            on mgr.pm_lot.entity_cd = ott.entity_cd and
-                            mgr.pm_lot.over_ot_cd = ott.over_cd
-                            where mgr.pm_lot.entity_cd = '$entity'
-                            and mgr.pm_lot.project_no = '$project'
-                            and mgr.pm_lot.lot_no = '$key->lot_no'";
-                        $dt_lot = DB::connection('ifcapb')->select($sql);
-                        if(empty($dt_lot)){
-                            $msg = "Save failed: Can't get data from mgr.pm_lot or the data is empty/unavailable.";
-                            $st = 'Fail';
-                            return response()->json([
-                                'status' => $st,
-                                'pesan' => $msg
-                            ]);
-                            exit();
-                        }
-                        $over_cd = $dt_lot[0]->over_ot_cd;
-                        $zone_cd = $dt_lot[0]->zone_ot_cd;
-                        $trx_type = $dt_lot[0]->trx_type; 
-                        // $level_no = $dt_lot[0]->level_no; 
+    //             $sql = "SELECT TIMESTAMPDIFF(HOUR,  start_overtime, end_overtime) as hour_diff, TIMESTAMPDIFF ( minute , start_overtime, end_overtime ) as min_diff,v_ot_tenancy.* from v_ot_tenancy where entity_cd='$entity' and project_no='$project' and tenant_no = '$bill_debtor' and approved='N'  and status ='A' and start_overtime >= '$startmysql' and start_overtime <= '$endmysql'";   
+    //             // var_dump($sql);exit();     
+    //             $dt_OT = DB::connection('ifcaadm')->select($sql);
+    //             if(!empty($dt_OT)){
+    //                 $dt_fji_dtl = [];$id_ot = [];$no=1;
+    //                 foreach ($dt_OT as $key) {
+    //                     $sql = "SELECT mgr.pm_lot.level_no,mgr.pm_lot.over_ot_cd,ott.trx_type , mgr.pm_lot.zone_ot_cd 
+    //                         from mgr.pm_lot
+    //                         inner join mgr.ot_type ott (nolock) 
+    //                         on mgr.pm_lot.entity_cd = ott.entity_cd and
+    //                         mgr.pm_lot.over_ot_cd = ott.over_cd
+    //                         where mgr.pm_lot.entity_cd = '$entity'
+    //                         and mgr.pm_lot.project_no = '$project'
+    //                         and mgr.pm_lot.lot_no = '$key->lot_no'";
+    //                     $dt_lot = DB::connection('ifcapb')->select($sql);
+    //                     if(empty($dt_lot)){
+    //                         $msg = "Save failed: Can't get data from mgr.pm_lot or the data is empty/unavailable.";
+    //                         $st = 'Fail';
+    //                         return response()->json([
+    //                             'status' => $st,
+    //                             'pesan' => $msg
+    //                         ]);
+    //                         exit();
+    //                     }
+    //                     $over_cd = $dt_lot[0]->over_ot_cd;
+    //                     $zone_cd = $dt_lot[0]->zone_ot_cd;
+    //                     $trx_type = $dt_lot[0]->trx_type; 
+    //                     // $level_no = $dt_lot[0]->level_no; 
                         
-                        $dt_fji_dtl[] = array(
-                            'entity_cd' => $entity,
-                            'project_no'=>$project,
-                            'debtor_acct'=>$bill_debtor_acct,
-                            'lot_no'=>$key->lot_no,
-                            'inv_group'=>$inv_group,
-                            'trx_type'=>$trx_type,
-                            'over_cd'=>$over_cd,
-                            'zone_cd'=>$zone_cd,
-                            'bill_date'=>$postdate_new,
-                            'begin_date'=>date('Y M d H:i:s',strtotime($key->start_overtime)),
-                            'end_date'=>date('Y M d H:i:s',strtotime($key->end_overtime)),
-                            'apport_percent'=>100,
-                            'usage'=>$key->hour_diff,
-                            'rate'=>0,
-                            'trx_amt'=>0,
-                            'base_amt'=>0,
-                            'tax_amt'=>0,
-                            'audit_user'=>'TWP',
-                            'audit_date'=>$today,
-                            'descs'=>$key->description,
-                            'usage_zone'=>$key->min_diff,
-                            'area'=>0,
-                            // 'level_no'=>$level_no,
-                            // 'hours'=>$key->hour_diff,
-                            // 'trx_no'=>$no,
-                            'rowid_hd'=>$rowid_hd
-                        );
-                        $id_ot[]=$key->id;
-                        $no++;
-                    }
-                    DB::connection('ifcapb')
-                    ->table('mgr.ot_trxdt_fji')
-                    ->insert($dt_fji_dtl);
-                    $dtup = array('approved' => 'Y', 'status'=>'Z');
-                    // $criteria = array(
-                    //     'entity_cd'=>$entity,
-                    //     'project_no'=>$project,
-                    //     'debtor_acct' => $bill_debtor,
-                    //     'status' =>'A',
-                    //     'start_overtime >' =>$startmysql,
-                    //     'start_overtime <' =>$endmysql
-                    //     );
-                    DB::connection('ifcaadm')
-                    ->table('ot_trx')
-                    ->whereIn('id',$id_ot)
-                    ->update($dtup);
-                    // var_dump($up_stat);
-                } else {
-                    $msg = "There's no overtime available.";
-                    $st = 'Fail';
-                    return response()->json([
-                        'status' => $st,
-                        'pesan' => $msg
-                    ]);
-                } 
+    //                     $dt_fji_dtl[] = array(
+    //                         'entity_cd' => $entity,
+    //                         'project_no'=>$project,
+    //                         'debtor_acct'=>$bill_debtor_acct,
+    //                         'lot_no'=>$key->lot_no,
+    //                         'inv_group'=>$inv_group,
+    //                         'trx_type'=>$trx_type,
+    //                         'over_cd'=>$over_cd,
+    //                         'zone_cd'=>$zone_cd,
+    //                         'bill_date'=>$postdate_new,
+    //                         'begin_date'=>date('Y M d H:i:s',strtotime($key->start_overtime)),
+    //                         'end_date'=>date('Y M d H:i:s',strtotime($key->end_overtime)),
+    //                         'apport_percent'=>100,
+    //                         'usage'=>$key->hour_diff,
+    //                         'rate'=>0,
+    //                         'trx_amt'=>0,
+    //                         'base_amt'=>0,
+    //                         'tax_amt'=>0,
+    //                         'audit_user'=>'TWP',
+    //                         'audit_date'=>$today,
+    //                         'descs'=>$key->description,
+    //                         'usage_zone'=>$key->min_diff,
+    //                         'area'=>0,
+    //                         // 'level_no'=>$level_no,
+    //                         // 'hours'=>$key->hour_diff,
+    //                         // 'trx_no'=>$no,
+    //                         'rowid_hd'=>$rowid_hd
+    //                     );
+    //                     $id_ot[]=$key->id;
+    //                     $no++;
+    //                 }
+    //                 DB::connection('ifcapb')
+    //                 ->table('mgr.ot_trxdt_fji')
+    //                 ->insert($dt_fji_dtl);
+    //                 $dtup = array('approved' => 'Y', 'status'=>'Z');
+    //                 // $criteria = array(
+    //                 //     'entity_cd'=>$entity,
+    //                 //     'project_no'=>$project,
+    //                 //     'debtor_acct' => $bill_debtor,
+    //                 //     'status' =>'A',
+    //                 //     'start_overtime >' =>$startmysql,
+    //                 //     'start_overtime <' =>$endmysql
+    //                 //     );
+    //                 DB::connection('ifcaadm')
+    //                 ->table('ot_trx')
+    //                 ->whereIn('id',$id_ot)
+    //                 ->update($dtup);
+    //                 // var_dump($up_stat);
+    //             } else {
+    //                 $msg = "There's no overtime available.";
+    //                 $st = 'Fail';
+    //                 return response()->json([
+    //                     'status' => $st,
+    //                     'pesan' => $msg
+    //                 ]);
+    //             } 
     
-                $msg = "Data has been saved successfully";
-                $st = 'OK';
-                $dtexec = array('bill_debtor'=>$bill_debtor,'postdate'=> $postdate,'bill_date'=>$postdate_new,'startperiod'=>$startperiod,'endperiod'=>$endperiod,'rowid_hdfji'=>$rowid_hd,'entity'=>$entity,'project'=>$project,'audit_user'=>'TWP','id_ot'=>$id_ot);
+    //             $msg = "Data has been saved successfully";
+    //             $st = 'OK';
+    //             $dtexec = array('bill_debtor'=>$bill_debtor,'postdate'=> $postdate,'bill_date'=>$postdate_new,'startperiod'=>$startperiod,'endperiod'=>$endperiod,'rowid_hdfji'=>$rowid_hd,'entity'=>$entity,'project'=>$project,'audit_user'=>'TWP','id_ot'=>$id_ot);
                 
-        } catch(\Illuminate\Database\QueryException $ex){ 
-            $msg = "Save failed: " . $ex->getMessage();
-            $st  = 'Failed';
-        }
-        return response()->json([
-            'status' => $st,
-            'pesan' => $msg,
-            'dtexec'=> $dtexec
-        ]);
-    }
+    //     } catch(\Illuminate\Database\QueryException $ex){ 
+    //         $msg = "Save failed: " . $ex->getMessage();
+    //         $st  = 'Failed';
+    //     }
+    //     return response()->json([
+    //         'status' => $st,
+    //         'pesan' => $msg,
+    //         'dtexec'=> $dtexec
+    //     ]);
+    // }
     public function approve_ot(Request $request){
         $dtexec = $request->dtexec;
         $rowid_hd = $dtexec['rowid_hdfji'];

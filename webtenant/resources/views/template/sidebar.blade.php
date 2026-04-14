@@ -3,7 +3,7 @@
         <div class="nk-sidebar-brand">
             <a href="" class="logo-link nk-sidebar-logo">
                 {{-- <img class="logo-light logo-img" src="{{ url('/img/logo-bw.png') }}" alt="logo"> --}}
-                <img class="logo-light logo-img" src="{{ url('/img/logoweb/logoweb.png') }}" alt="logo" style="max-height: 136px;margin-left: 50%;">
+                <img class="logo-light logo-img" src="{{ url('/img/logoweb/logoweb.png') }}" alt="logo" style="max-height: 136px;margin-left: 10%;">
             </a>
         </div>
         <div class="nk-menu-trigger mr-n2">

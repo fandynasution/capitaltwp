@@ -37,13 +37,11 @@
                             <div class="input-group">                            
                                 <div class="col-10" style="padding:0px"><select name="project" id="project" data-placeholder="Choose Project" class="form-control select2" tabindex="2" >
                                     <option value=""></option>
-                                    <option value="0002">TRINITY TOWER</option> 
-                                    {{-- <option value="all">All</option> --}}
-                                    {{-- <?php if(!empty($datapro)) {
+                                    <?php if(!empty($datapro)) {
                                         foreach($datapro as $key){
                                             echo "<option value='".$key->project_no."'>".$key->descs."</option>";
                                         }  
-                                    } ?>   --}}
+                                    } ?>
                                 </select></div>
                             </div> 
                         </div>

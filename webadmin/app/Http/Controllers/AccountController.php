@@ -172,7 +172,7 @@ class AccountController extends Controller
     }
     public function resetpass(Request $request)
     {
-        $password_default = 'windas123';
+        $password_default = 'Capital123';
         $password = md5($password_default);
         
         // var_dump($request->all());exit;

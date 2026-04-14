@@ -24,6 +24,10 @@
                 }
             @endphp
             <div class="nk-header-app-name">
+                <!-- Logo -->
+                <div class="nk-header-app-logo" style="margin-right: 10px;">
+                    <img src="{{ asset('public/lainnya/img/logo-col.png') }}" alt="Logo" style="height:40px;">
+                </div>
                 <div class="nk-header-app-info">
                     <span class="sub-text">Web Admin</span>
                     <span class="lead-text" style="font-size: 18px">Tenant Web Portal</span>

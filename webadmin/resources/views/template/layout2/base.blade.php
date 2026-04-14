@@ -51,17 +51,6 @@
 
 <body class="nk-body npc-default has-apps-sidebar has-sidebar ">
     <div class="nk-app-root">
-        <div class="nk-apps-sidebar is-dark" style="width:100px;">
-            <div class="nk-apps-brand">
-                <a href="" class="logo-link" style="padding:1rem 1rem 2rem;">
-                    {{-- <img class="logo-light logo-img" src="{{ url('images/logoweb/favicon.ico') }}" alt="logo"> --}}
-                    <img class="logo-light" src="{{ url('images/logoweb/iconweb.png') }}" alt="logo" style ="max-width:70px!important;width:70px!important">
-                </a>
-            </div>
-            {{-- <div class="nk-sidebar-element">
-                @include('template.layout2.leftbarnew')
-            </div> --}}
-        </div>
         <!-- main @s -->
         <div class="nk-main ">
             <!-- wrap @s -->

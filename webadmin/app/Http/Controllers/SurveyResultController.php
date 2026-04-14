@@ -34,17 +34,17 @@ class SurveyResultController extends Controller
                 d.date_created AS date_created,
                 (
                     SELECT COUNT(1)
-                    FROM windasdb.pm_survey_respon d2
+                    FROM pm_survey_respon d2
                     WHERE d2.survey_id = b.survey_id
                     AND d2.respon = b.line_no
                 ) AS jumlah
-            FROM windasdb.pm_survey_hd a
-            JOIN windasdb.pm_survey_dt b ON a.id = b.survey_id
-            JOIN windasdb.pm_survey_publish c ON a.publish_id = c.id
-            LEFT JOIN windasdb.pm_survey_respon d 
+            FROM pm_survey_hd a
+            JOIN pm_survey_dt b ON a.id = b.survey_id
+            JOIN pm_survey_publish c ON a.publish_id = c.id
+            LEFT JOIN pm_survey_respon d 
                    ON b.survey_id = d.survey_id
                   AND d.respon = b.line_no
-            LEFT JOIN windasdb.all_login e 
+            LEFT JOIN all_login e 
                    ON d.email_addr = e.email
             Where a.publish_id ='".$publish."'
             ORDER BY c.id, a.quest_no, b.line_no, d.date_created";

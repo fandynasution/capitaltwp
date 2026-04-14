@@ -389,6 +389,7 @@
 						var tenant_no = $(this).find(':selected').val();
 						var ent = $(this).find(':selected').data("entity");
 						var prj = $(this).find(':selected').data("project");
+						console.log(tenant_no);
 
 						if (tenant_no !== '') {
 							var site_url = "{{ url('ticket/getLotNo') }}";
@@ -418,6 +419,7 @@
 							$("#floor").val(null);
 						}
 					});
+					
 
 					// 🔹 AUTO SELECT jika hanya ada satu tenant
 					setTimeout(function() {

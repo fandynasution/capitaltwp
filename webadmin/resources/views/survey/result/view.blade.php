@@ -6,9 +6,9 @@
         <div class="nk-block-head">
           <div class="nk-block-head-content">
             <h4 class="nk-block-title">Survey Result 
-                <div class="float-right">
+                {{-- <div class="float-right">
                     <button type="button" hidden="true" style="padding:7px 10px" class="btn btn-primary" id="savefrmxl" onclick="generate()"><em class="icon ni ni-download"></em> &nbsp;Generate PDF</button>&nbsp;&nbsp;<button type="button" class="btn btn-secondary" style="padding:7px 10px" onclick="goback()"><em class="icon ni ni-arrow-left-circle-fill"></em>&nbsp;Back</button>
-                </div>
+                </div> --}}
             </h4>
           </div>
         </div>

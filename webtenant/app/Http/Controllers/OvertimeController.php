@@ -24,7 +24,7 @@ class OvertimeController extends Controller
             ON a.lot_no = b.lot_no AND a.entity_cd=b.entity_cd AND a.project_no=b.project_no
             INNER JOIN mgr.pm_level c ON b.level_no=c.level_no and a.entity_cd=c.entity_cd AND a.project_no=c.project_no
             WHERE a.debtor_acct='$tenant_no' AND a.status='Y' AND a.meter_type='E'";
-        $dtLay = DB::connection('WINDASLIVE')->select($sql);
+        $dtLay = DB::connection('MPP')->select($sql);
 
         $lpic = '';
 
@@ -44,7 +44,7 @@ class OvertimeController extends Controller
                 WHERE a.business_id='$business_no' 
                 AND a.project_no='JSE01'";
         
-        $query = DB::connection('WINDASLIVE')->select($sql);
+        $query = DB::connection('MPP')->select($sql);
 
         if (!empty($query)) {
             $list = '';
@@ -112,7 +112,7 @@ class OvertimeController extends Controller
             $sql .=" AND a.tenant_no='$tenant'";
         } 
 
-        $rst = DB::connection('WINDASLIVE')->select($sql);
+        $rst = DB::connection('MPP')->select($sql);
         $combo[] = '<option></option>';
         foreach ($rst as $result) {
             $combo[] = '<option value="'.$result->lot_no.'" '.'>'.$result->descs.'</option>';
@@ -239,12 +239,12 @@ class OvertimeController extends Controller
                 $diff1Day = new DateInterval('P1D');
                 $diff1Sec = new DateInterval('PT1S');
 
-                $data_otspec = DB::connection('WINDASLIVE')
+                $data_otspec = DB::connection('MPP')
                     ->table('mgr.ot_spec')
                     ->get();
 
                 //test workhour
-                $data_wh = DB::connection('WINDASLIVE')
+                $data_wh = DB::connection('MPP')
                     ->table('mgr.cf_workhour')
                     ->get();
 
@@ -274,7 +274,7 @@ class OvertimeController extends Controller
 
                     $holidaydt = array('holiday' => date('Ymd H:i:s',strtotime($dt_factor->format('Y-m-d'))));
                     // var_dump($holidaydt);
-                    $data_holiday = DB::connection('WINDASLIVE')
+                    $data_holiday = DB::connection('MPP')
                         ->table('mgr.cf_holiday')
                         ->where($holidaydt)
                         ->get();
@@ -565,7 +565,7 @@ class OvertimeController extends Controller
             'project_no'=>$project
         );
 
-        $dataspec = DB::connection('WINDASLIVE')
+        $dataspec = DB::connection('MPP')
             ->table('mgr.sv_spec')
             ->where($crit_spec)
             ->get();
@@ -614,7 +614,7 @@ class OvertimeController extends Controller
                 $body.= '<td>' .$description.' </td>';
             $body.= '</tr>';
             $body.= '</table>';
-            DB::connection('WINDASLIVE')->statement("exec mgr.x_send_mail_twp '$email','$subj','$body'");
+            DB::connection('MPP')->statement("exec mgr.x_send_mail_twp '$email','$subj','$body'");
         }
     
 
@@ -633,7 +633,7 @@ class OvertimeController extends Controller
         $project = $request->project;
 
         // Ambil level_no berdasarkan lot_no pertama (contoh)
-        $level = DB::connection('WINDASLIVE')->selectOne("
+        $level = DB::connection('MPP')->selectOne("
             SELECT level_no 
             FROM mgr.pm_lot
             WHERE lot_no = ?
@@ -648,7 +648,7 @@ class OvertimeController extends Controller
         $level_no = $level->level_no;
 
         // Ambil semua gambar pada level tersebut
-        $results = DB::connection('WINDASLIVE')->select("
+        $results = DB::connection('MPP')->select("
             SELECT picture
             FROM mgr.pm_floor_plan
             WHERE entity_cd = ?
@@ -691,7 +691,7 @@ class OvertimeController extends Controller
     }
 
     function getWorkhournew(Request $request) {
-        $end = DB::connection('WINDASLIVE')
+        $end = DB::connection('MPP')
             ->table('mgr.cf_workhour')
             ->where(DB::raw("RTRIM(day_type)"), $request->day_type)
             ->selectRaw("FORMAT(end_time, 'HH:mm') AS end_time")

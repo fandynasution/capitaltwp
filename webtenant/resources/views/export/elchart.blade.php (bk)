@@ -26,7 +26,7 @@
                     <hr>
                     <div class="table-responsive mt-3">
                         <table id="tblBilling" class="table table-bordered table-striped" role="grid" aria-describedby="tblBilling_info">
-                            <thead style="background:#b39d07;">
+                            <thead style="background:#101924; color: #ffffff;">
                                 <tr role='row'>
                                     <th class="text-center">Periode</th>
 									<th class="text-center">LWBP Usage (kwh)</th>

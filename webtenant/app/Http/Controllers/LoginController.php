@@ -31,10 +31,12 @@ class LoginController extends Controller
         $email = $request->email;
 
         $kriteria = array('email' => $email);
+        
         $query = DB::table('tenant')
             ->where($kriteria)
             ->get();
         //var_dump($query);
+        
 
         if(count($query)>0)
         {
@@ -45,6 +47,7 @@ class LoginController extends Controller
                 'combo' => $cbBus,
                 'dataimages' => $dtimg
             );
+            
             return view('login/step', $content);
         } else {
             return redirect('/')->with('alert', 'User not found');
@@ -142,13 +145,15 @@ class LoginController extends Controller
         }else{
             $query = DB::table('tenant')->get();
         }
+        
         $wherein="";//ambil businessno by email
         foreach ($query as $result) {
+            
             $wherein .= "'".$result->business_no."',";
         }
 
         $wherein=substr($wherein,0,-1);
-        //ambil businessid by status,expirydate (misahin user aktif sama udah ga aktif)
+        
         $sql = "SELECT * FROM pm_tenancy WHERE business_no in (".$wherein.") and status = 'A' and expiry_date >= now()";
         $query = DB::select($sql);
 

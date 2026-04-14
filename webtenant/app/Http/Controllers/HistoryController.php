@@ -203,7 +203,7 @@ class HistoryController extends Controller
 						GROUP BY pp.descs, ad.name, ad.address1, ad.address2, ad.address3, ad.post_cd, al.doc_no, al.due_date, al.descs, al.fdoc_amt, al.trx_mode, al.trx_type, al.entity_cd, al.project_no, al.debtor_acct, al.mcurr_cd, al.currency_cd, al.currency_rate, ars.age1, ars.age2, ars.age3, ars.age4, ars.age5, ars.age6, al.fbal_amt, al.old_ref_no, al.start_date,  al.end_date, al.doc_date, ac.credit_date
 						ORDER BY al.doc_date DESC";
 		            // 14 Sep 2021
-		        	$response = DB::connection('WINDASLIVE')->select($sql);
+		        	$response = DB::connection('MPP')->select($sql);
 		            return Datatables::of($response)
 		                ->make(true);
 	            }
@@ -222,7 +222,7 @@ class HistoryController extends Controller
 						GROUP BY pp.descs, ad.name, ad.address1, ad.address2, ad.address3, ad.post_cd, al.doc_no, al.due_date, al.descs, al.fdoc_amt, al.trx_mode, al.trx_type, al.entity_cd, al.project_no, al.debtor_acct, al.mcurr_cd, al.currency_cd, al.currency_rate, ars.age1, ars.age2, ars.age3, ars.age4, ars.age5, ars.age6, al.fbal_amt, al.old_ref_no, al.start_date,  al.end_date, al.doc_date, ac.credit_date
 						ORDER BY al.doc_date DESC";
 		            // 14 Sep 2021
-		        	$response = DB::connection('WINDASLIVE')->select($sql);
+		        	$response = DB::connection('MPP')->select($sql);
 		            return Datatables::of($response)
 		                ->make(true);
 	            }
@@ -275,7 +275,7 @@ class HistoryController extends Controller
 				AND al.doc_date >= '$start' AND al.doc_date <= '$end'
 				GROUP BY pp.descs, ad.name, ad.address1, ad.address2, ad.address3, ad.post_cd, al.doc_no, al.due_date, al.descs, al.fdoc_amt, al.trx_mode, al.trx_type, al.entity_cd, al.project_no, al.debtor_acct, al.mcurr_cd, al.currency_cd, al.currency_rate, ars.age1, ars.age2, ars.age3, ars.age4, ars.age5, ars.age6, al.fbal_amt, al.old_ref_no, al.start_date,  al.end_date, al.doc_date, ac.credit_date
 				ORDER BY al.doc_date DESC";
-	        $query = DB::connection('WINDASLIVE')->select($sql);
+	        $query = DB::connection('MPP')->select($sql);
 	    }
 
         if (count($query) > 0)

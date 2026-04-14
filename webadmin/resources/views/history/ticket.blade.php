@@ -16,9 +16,9 @@
             </div>
             <div class="card card-preview">
                 <div class="card-inner">
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         &nbsp;<button class="btn btn-info" id="btngenpdf" style="float: right !important;"><em class="icon ni ni-download"></em>Generate PDF</button>
-                    </div>
+                    </div> --}}
                     <div class="form-group">
                         <div  style="display: flex">
                             <label for="pl_project" class="form-label col-2" style="padding-right:20px;"> Reported Date</label>
@@ -187,7 +187,7 @@
                 }}
           ],
           dom: '<"toolbar group">frtip',
-          responsive: true,
+          responsive: false,
           columnDefs: [
             { responsivePriority: 1, targets: 8 } // Ticket Status jangan disembunyikan
         ]

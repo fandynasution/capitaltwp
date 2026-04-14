@@ -130,10 +130,7 @@ class WsbangunController extends Controller
                     DB::connection('ifcaadm')
                     ->table('tenant')
                     ->insert($data1);
-                    // var_dump('b');
-                    // $data_tenant = $this->m_tenant->get_by_criteria($crit1);
                     $data_tenant = DB::connection('ifcaadm')->table('tenant')->where($crit1)->get();
-                    // var_dump($data_tenant);exit();
                     if(!empty($data_tenant)) {
                         $id_tenant = $data_tenant[0]->id;
                         $password = 'Capital123';
@@ -144,13 +141,11 @@ class WsbangunController extends Controller
                             'tableforeign'=>'tenant',
                             'idforeign'=>$id_tenant
                         );
-                        // $this->m_login->insert($data2);
                         DB::connection('ifcaadm')
                             ->table('all_login')
                             ->insert($data2);
                     }
                     $crit2 = array('tenant_no'=>$tenant_no);
-                    // $cnt_tenancy = $this->m_tenancy->count_by_criteria($crit2);
                     $cnt_tenancy = DB::connection('ifcaadm')->table('pm_tenancy')->where($crit2)->get();
                     if(count($cnt_tenancy)<1) {
                         // var_dump('hehe');
@@ -166,6 +161,7 @@ class WsbangunController extends Controller
                         $entity_desc = $result[0]->entity_desc;
                         $project_desc = $result[0]->project_desc;
                         $data3 = array(
+                            'id'=>$id_tenant,
                             'business_no'=>$id_business,
                             'tenant_no'=>$tenant_no,
                             'entity_cd'=>$entity,
@@ -179,6 +175,7 @@ class WsbangunController extends Controller
                         );
                         // $this->m_tenancy->insert($data3);
                         DB::connection('ifcaadm')->table('pm_tenancy')->insert($data3);
+                        // var_dump($data3);exit;
                     }
                 } 
     

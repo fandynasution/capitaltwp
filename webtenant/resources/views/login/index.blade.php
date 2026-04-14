@@ -5,7 +5,7 @@
         <title>Capital Place | Log in</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+        <link rel="shortcut icon" href="{{ url('/img/logoweb/iconweb.ico') }}">
         <!-- CSS -->
         <link href="{{ asset('public/lainnya/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('public/lainnya/plugins/font-awesome-4.4.0/css/font-awesome.min.css') }}" rel="stylesheet">
@@ -62,7 +62,7 @@
     </head>
 
 <body class="login-page">
-    <div class="login-box" style="width: 720px;">
+    <div class="login-box" style="width: 1024px;">
 
         {{-- <div class="login-logo">
             <img src="{{ asset('public/lainnya/img/logo-col.png') }}" height="200">

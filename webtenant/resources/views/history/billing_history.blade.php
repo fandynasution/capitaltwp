@@ -52,7 +52,7 @@
 	                	<div class="card-inner">
 	                		<div class="table-responsive mt-3">
 	                			<table id="tblBilling" class="table table-bordered table-striped" role="grid" aria-describedby="tblBilling_info">
-		                            <thead style="background:#b39d07;">
+		                            <thead style="background:#101924; color: #ffffff;">
 		                                <tr role="row">
 		                                    <th class="sorting text-center" style="width: 7px; vertical-align: middle;">No.</th>
 		                                    <th class="sorting text-center" style="width: 24px;">Document Number</th>
@@ -150,15 +150,16 @@
 	                    	return number_format(data);
 	                    }
 		        	},
-					{data:"credit_date",
-		            	render: function (data, type, row, meta) {
-			                if (data==null)
-			                {
-			                	date = ' - ';
-			                }
-			                return moment(data).format('DD MMMM YYYY');
-			            }
-		        	},
+					{
+						data: "credit_date",
+						render: function (data, type, row, meta) {
+							if (!data || !moment(data).isValid()) {
+								return ' - ';
+							}
+
+							return moment(data).format('DD MMMM YYYY');
+						}
+					},
 		        	{data:null, className: "text-right text-nowrap",
 		        		render: function (data, type, row) {
 		        			var sisa = row.fdoc_amt - row.alloc_amt;
@@ -168,16 +169,18 @@
 		        ],
 		        dom : "Bfrtip",
 		        buttons: [
-		            {
-		                extend: 'pdf',
-		                title: 'Billing History',
-		                className: 'btn btn-primary mb-2',
-                        text: '<em class="icon ni ni-download"></em>&nbsp;Generate PDF',
-                        init: function(api, node, config) {
-                            $(node).removeClass('dt-button')
-                        },
-		            },
-		        ]
+    {
+        extend: 'pdf',
+        title: 'Billing History',
+        orientation: 'landscape', // <- ini yang bikin landscape
+        pageSize: 'A4',           // optional, biar jelas
+        className: 'btn btn-primary mb-2',
+        text: '<em class="icon ni ni-download"></em>&nbsp;Generate PDF',
+        init: function(api, node, config) {
+            $(node).removeClass('dt-button')
+        },
+    },
+]
 	    	});
 
 	    	$('#search').click(function(event){

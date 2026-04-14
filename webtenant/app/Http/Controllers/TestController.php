@@ -18,7 +18,7 @@ class TestController extends Controller {
         );
 
 
-        $dataopen = DB::connection('WINDASLIVE')
+        $dataopen = DB::connection('MPP')
             ->table('mgr.cf_document_ctl')
             ->where($dataopenArray)
             ->get();
@@ -33,7 +33,7 @@ class TestController extends Controller {
         );
 
 
-        $dataopen2 = DB::connection('WINDASLIVE')
+        $dataopen2 = DB::connection('MPP')
             ->table('mgr.cf_document_format')
             ->where($dataopen2Array)
             ->get();

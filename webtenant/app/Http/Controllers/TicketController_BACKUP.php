@@ -27,7 +27,7 @@ class TicketController extends Controller
             'entity_cd' => $data_tenancy[0]->entity_cd,
             'project_no' => $data_tenancy[0]->project_no
         );
-        $dataspec = DB::connection('WINDASLIVE')
+        $dataspec = DB::connection('MPP')
             ->table('mgr.sv_spec')
             ->where($crit_spec)
             ->get();
@@ -71,7 +71,7 @@ class TicketController extends Controller
             'entity_cd' => $ent,
             'project_no' => $prj
         );
-        $data = DB::connection('WINDASLIVE')
+        $data = DB::connection('MPP')
                     ->table('mgr.sv_spec')
                     ->where($where)
                     ->get();
@@ -86,7 +86,7 @@ class TicketController extends Controller
             'entity_cd' => $entity_cd,
             'project_no' => $project_no
         );
-        $data = DB::connection('WINDASLIVE')
+        $data = DB::connection('MPP')
                     ->table('mgr.sv_spec')
                     ->where($where)
                     ->get();
@@ -106,7 +106,7 @@ class TicketController extends Controller
             'prefix' => $prefix,
             'year'  => date("Y")
         );
-        $data_cat = DB::connection('WINDASLIVE')
+        $data_cat = DB::connection('MPP')
             ->table('mgr.cf_document_ctl_dtl')
             ->where($crit_cat)
             ->get();
@@ -141,7 +141,7 @@ class TicketController extends Controller
                 echo('<option></option>');
             } else {
                 $crit_cat = array('complain_type' => $ticket_type);
-                $data_cat = DB::connection('WINDASLIVE')
+                $data_cat = DB::connection('MPP')
                     ->table('mgr.sv_category')
                     ->where($crit_cat)
                     ->get();
@@ -160,7 +160,7 @@ class TicketController extends Controller
     public function getCatEdit($complain_type, $category_cd)
     {
         $crit_cat = array('complain_type' => $complain_type);
-        $data_cat = DB::connection('WINDASLIVE')
+        $data_cat = DB::connection('MPP')
             ->table('mgr.sv_category')
             ->where($crit_cat)
             ->get();
@@ -197,7 +197,7 @@ class TicketController extends Controller
 
                 if ($tenant_no == 'BM') {
                     // Ambil semua lot untuk BM (tidak perlu filter tenant)
-                    $tenant_lot = DB::connection('WINDASLIVE')
+                    $tenant_lot = DB::connection('MPP')
                         ->table('mgr.pm_lot')
                         ->where([
                             ['entity_cd', '=', $entity],
@@ -207,7 +207,7 @@ class TicketController extends Controller
                         ->get();
                 } else {
                     // Join ke pm_tenant_lot untuk dapat lot yang terkait tenant_no tertentu
-                    $tenant_lot = DB::connection('WINDASLIVE')
+                    $tenant_lot = DB::connection('MPP')
                         ->table('mgr.pm_lot AS l')
                         ->join('mgr.pm_tenant_lot AS tl', function ($join) {
                             $join->on('l.entity_cd', '=', 'tl.entity_cd')
@@ -258,7 +258,7 @@ class TicketController extends Controller
                 'entity_cd'  => $entity,
                 'project_no' => $project,
             );
-            $tenant_lot = DB::connection('WINDASLIVE')
+            $tenant_lot = DB::connection('MPP')
             ->table('mgr.pm_lot')
             ->where($like)
             ->orderBy('lot_no', 'ASC')
@@ -269,7 +269,7 @@ class TicketController extends Controller
                 'entity_cd'  => $entity,
                 'project_no' => $project,
             );
-            $tenant_lot = DB::connection('WINDASLIVE')
+            $tenant_lot = DB::connection('MPP')
                         ->table('mgr.pm_lot AS l')
                         ->join('mgr.pm_tenant_lot AS tl', function ($join) {
                             $join->on('l.entity_cd', '=', 'tl.entity_cd')
@@ -390,7 +390,7 @@ class TicketController extends Controller
     {
         // Gunakan 2 koneksi
         $mainConn = DB::connection(); // default
-        $liveConn = DB::connection('WINDASLIVE');
+        $liveConn = DB::connection('MPP');
         try {
             // === semua kode kamu dimasukkan di dalam try ===
             $mainConn->beginTransaction();
@@ -419,7 +419,7 @@ class TicketController extends Controller
             \Log::info('SAVE START', ['id' => $id, 'tenant_no' => $tenant_no, 'entity' => $entity]);
 
             $crit_spec = ['category_cd' => $category];
-            $dataspec = DB::connection('WINDASLIVE')
+            $dataspec = DB::connection('MPP')
                 ->table('mgr.sv_category')
                 ->where($crit_spec)
                 ->get();
@@ -432,7 +432,7 @@ class TicketController extends Controller
                 throw new \Exception("Tenant tidak ditemukan: $tenant_no");
             }
 
-            $dataopen = DB::connection('WINDASLIVE')
+            $dataopen = DB::connection('MPP')
                 ->table('mgr.cf_document_ctl')
                 ->where(['entity_cd' => $entity, 'prefix' => $pre])
                 ->get();
@@ -443,7 +443,7 @@ class TicketController extends Controller
             $next_doc_noSave = $dataopen[0]->next_doc_no;
             $Type_format1 = $dataopen[0]->type_format;
 
-            $dataopen2 = DB::connection('WINDASLIVE')
+            $dataopen2 = DB::connection('MPP')
                 ->table('mgr.cf_document_format')
                 ->where(['rowId' => $next_doc_noSave, 'type_format' => $Type_format1])
                 ->get();
@@ -542,11 +542,11 @@ class TicketController extends Controller
             );
             if (!$id)
             {
-                DB::connection('WINDASLIVE')
+                DB::connection('MPP')
                     ->table('mgr.sv_entry_multi')
                     ->insert($dataServ1);
             } else {
-                DB::connection('WINDASLIVE')
+                DB::connection('MPP')
                     ->table('mgr.sv_entry_multi')
                     ->where($critedit2)
                     ->update($dataServ1);
@@ -574,7 +574,7 @@ class TicketController extends Controller
             );
 
             if (!$id) {
-                $query = DB::connection('WINDASLIVE')
+                $query = DB::connection('MPP')
                     ->table('mgr.sv_entry_multi_dt')
                     ->insert($dataServ2);
 
@@ -587,7 +587,7 @@ class TicketController extends Controller
                 }
 
             } else {
-                $query = DB::connection('WINDASLIVE')
+                $query = DB::connection('MPP')
                     ->table('mgr.sv_entry_multi_dt')
                     ->where($critedit2)
                     ->update($dataServ2);
@@ -610,7 +610,7 @@ class TicketController extends Controller
                 );
 
 
-                DB::connection('WINDASLIVE')
+                DB::connection('MPP')
                     ->table('mgr.sv_spec')
                     ->where($crit)
                     ->update($dataCompl);
@@ -622,7 +622,7 @@ class TicketController extends Controller
                     'year'  => date("Y")
                 );
 
-                DB::connection('WINDASLIVE')
+                DB::connection('MPP')
                     ->table('mgr.cf_document_ctl_dtl')
                     ->where($crit2)
                     ->update($dataCompl2);
@@ -635,7 +635,7 @@ class TicketController extends Controller
                 'project_no'=>$project
             );
 
-            $dataspec = DB::connection('WINDASLIVE')
+            $dataspec = DB::connection('MPP')
                 ->table('mgr.sv_spec')
                 ->where($crit_spec)
                 ->get();
@@ -653,7 +653,7 @@ class TicketController extends Controller
             $body.='TWP System<br>';
             
             $subj = 'Ticket number '.$number.' opened';
-            DB::connection('WINDASLIVE')->statement("exec mgr.x_send_mail_twp '$email','$subj','$body'");
+            DB::connection('MPP')->statement("exec mgr.x_send_mail_twp '$email','$subj','$body'");
 
             $callback = array(
                 "pesan" => $msg,

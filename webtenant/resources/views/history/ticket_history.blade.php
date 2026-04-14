@@ -52,7 +52,7 @@
 	                	<div class="card-inner">
 	                		<div class="table-responsive mt-3">
 	                			<table id="tblTicket" class="table table-bordered table-striped" role="grid" aria-describedby="tblTicket_info">
-		                            <thead style="background:#b39d07;">
+		                            <thead style="background:#101924; color: #ffffff;">
 		                                <tr role="row">
 		                                    <th class="sorting text-center" style="width: 7px; vertical-align: middle;">No.</th>
 		                                    <th class="sorting text-center" style="width: 24px;">Ticket Number</th>

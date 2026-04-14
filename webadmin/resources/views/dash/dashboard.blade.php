@@ -26,7 +26,7 @@
             <div class="card card-preview col-12">
                 {{-- <div class="card-header border-bottom"><h5>Chart</h5></div> --}}
                 <div class="card-inner" style="padding-top:10px">
-                    <button id="generate" class="btn btn-primary float-right" style="margin-right: 5px;"><em class="icon ni ni-download"></em> Generate PDF</button>
+                    {{-- <button id="generate" class="btn btn-primary float-right" style="margin-right: 5px;"><em class="icon ni ni-download"></em> Generate PDF</button> --}}
                     <h5 class="card-title" style="border-bottom: solid 2px #dbdfea;padding-bottom:25px;margin-bottom: 20px;">Chart </h5><br>
                     <div style='height: 240px!important;'>
                         <canvas class="col-sm-12" id="barChart" style="width: 571px; "></canvas>

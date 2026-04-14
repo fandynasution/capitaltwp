@@ -153,7 +153,7 @@
                             if(!empty($list_bill)) {
                         ?>
                         <table id="tblBilling" class="table table-bordered table-striped" role="grid" aria-describedby="tblBilling_info">
-                            <thead style="background:#b39d07;">
+                            <thead style="background:#101924; color: #ffffff;">
                                 <tr role='row'>
                                     <th class="sorting text-center" style="width: 7px; vertical-align: middle;">No.</th>
                                     <th class="sorting text-center" style="width: 24px;">Document Number</th>
@@ -205,7 +205,7 @@
                             if(!empty($list_hticket)) {
                         ?>
                         <table id="tblTicket" class="table table-bordered table-striped" role="grid" aria-describedby="tblTicket_info">
-                            <thead style="background:#b39d07;">
+                            <thead style="background:#101924; color: #ffffff;">
                                 <tr role="row">
                                     <th class="sorting text-center" style="width: 7px; vertical-align: middle;">No.</th>
                                     <th class="sorting text-center" style="width: 24px;">Ticket Number</th>
@@ -250,7 +250,7 @@
                             if(!empty($list_hovertime)) {
                         ?>
                         <table id="tblOvertime" class="table table-bordered table-striped" role="grid" aria-describedby="tblOvertime_info">
-                            <thead style="background:#b39d07;">
+                            <thead style="background:#101924; color: #ffffff;">
                                 <tr role="row">
                                     <th class="sorting_asc text-center" style="width: 40px; vertical-align: middle;">No.</th>
                                     <th class="sorting text-center" style="width: 80px; vertical-align: middle;">ID</th>
@@ -457,22 +457,73 @@
                     // console.log(data);
                     var datas = JSON.parse(data);
                     // console.log(datas.chartdt);
-                    var aop = {showScale: true, scaleShowGridLines: true, scaleGridLineColor: "rgba(0,0,0,.05)", scaleGridLineWidth: 1, scaleShowHorizontalLines: true, scaleLabel: "<%= value%> kwh", scaleShowVerticalLines: true, bezierCurve: true, bezierCurveTension: 0.3, pointDot: false, pointDotRadius: 4, pointDotStrokeWidth:2, pointHitDetectionRadius: 20, datasetStroke: true, datasetStrokeWidth: 2, datasetFill: false, maintainAspectRatio: false, responsive: true
-                    };
-                    var bop = {scaleBeginAtZero: true, scaleShowGridLines: true, scaleGridLineColor: "rgba(0,0,0,.05)", scaleGridLineWidth: 1, scaleShowHorizontalLines: true, scaleShowVerticalLines: true, scaleLabel: "<%= value%> kwh", barShowStroke: true, barStrokeWidth: 2, barValueSpacing: 5, barDatasetSpacing: 1, responsive: true, maintainAspectRatio: false };
 
+                    // ================== TAMBAHAN WARNA ==================
+                    datas.chartdt.datasets.forEach(ds => {
+                        if (ds.label && ds.label.includes('22:00 - 18:00')) {
+                            ds.backgroundColor = 'rgba(255, 0, 0, 0.4)'; // merah
+                            ds.borderColor = 'rgba(255, 0, 0, 1)';
+                            ds.pointBackgroundColor = 'rgba(255, 0, 0, 1)';
+                        } 
+                        else if (ds.label && ds.label.includes('18:00 - 22:00')) {
+                            ds.backgroundColor = 'rgba(255, 193, 7, 0.4)'; // kuning
+                            ds.borderColor = 'rgba(255, 193, 7, 1)';
+                            ds.pointBackgroundColor = 'rgba(255, 193, 7, 1)';
+                        }
+                    });
+                    // ====================================================
+
+                    var aop = {
+                        showScale: true,
+                        scaleShowGridLines: true,
+                        scaleGridLineColor: "rgba(0,0,0,.05)",
+                        scaleGridLineWidth: 1,
+                        scaleShowHorizontalLines: true,
+                        scaleLabel: "<%= value%> kwh",
+                        scaleShowVerticalLines: true,
+                        bezierCurve: true,
+                        bezierCurveTension: 0.3,
+                        pointDot: false,
+                        pointDotRadius: 4,
+                        pointDotStrokeWidth:2,
+                        pointHitDetectionRadius: 20,
+                        datasetStroke: true,
+                        datasetStrokeWidth: 2,
+                        datasetFill: false,
+                        maintainAspectRatio: false,
+                        responsive: true
+                    };
+
+                    var bop = {
+                        scaleBeginAtZero: true,
+                        scaleShowGridLines: true,
+                        scaleGridLineColor: "rgba(0,0,0,.05)",
+                        scaleGridLineWidth: 1,
+                        scaleShowHorizontalLines: true,
+                        scaleShowVerticalLines: true,
+                        scaleLabel: "<%= value%> kwh",
+                        barShowStroke: true,
+                        barStrokeWidth: 2,
+                        barValueSpacing: 5,
+                        barDatasetSpacing: 1,
+                        responsive: true,
+                        maintainAspectRatio: false
+                    };
+
+                    // AREA CHART
                     $("#areaChart").remove();
                     $("#tabItem1").append('<canvas id="areaChart"></canvas>');
                     var cta = document.getElementById("areaChart").getContext("2d");
-                    // var ach = new Chart(cta, {
-                    //     type: 'line',
-                    //     data: datas.chartdt,
-                    //     aop
-                    // });
+
                     var ach = new Chart(cta, {
                         type: 'line',
                         data: datas.chartdt,
                         options: {
+                            elements: {
+                                line: {
+                                    fill: true
+                                }
+                            },
                             tooltips: {
                                 callbacks: {
                                     afterLabel: function(tooltipItem, data) {
@@ -483,14 +534,11 @@
                         }
                     });
 
+                    // BAR CHART
                     $("#barChart").remove();
                     $("#tabItem2").append('<canvas id="barChart"></canvas>');
                     var ctb = document.getElementById("barChart").getContext("2d");
-                    // var bch = new Chart(ctb, {
-                    //     type: 'bar',
-                    //     data: datas,
-                    //     bop
-                    // });
+
                     var bch = new Chart(ctb, {
                         type: 'bar',
                         data: datas.chartdt,
@@ -505,6 +553,7 @@
                         }
                     });
 
+                    // BUTTON
                     $("#legendDiv").empty();
                     $("#legendDiv").append('<button name="genPDF" type="button" class="btn btn-primary" onclick="genPDF()"><em class="icon ni ni-download"></em><span>Generate PDF</span></button>');
                 }
@@ -525,51 +574,76 @@
                     success:function(data){
                         //console.log(data);
                         var datas = JSON.parse(data);
+
+                        // ================== TAMBAHAN WARNA ==================
+                        datas.chartdt.datasets.forEach(ds => {
+                            if (ds.label && ds.label.includes('22:00 - 18:00')) {
+                                ds.backgroundColor = 'rgba(255, 0, 0, 0.4)'; // merah
+                                ds.borderColor = 'rgba(255, 0, 0, 1)';
+                                ds.pointBackgroundColor = 'rgba(255, 0, 0, 1)';
+                            } 
+                            else if (ds.label && ds.label.includes('18:00 - 22:00')) {
+                                ds.backgroundColor = 'rgba(255, 193, 7, 0.4)'; // kuning
+                                ds.borderColor = 'rgba(255, 193, 7, 1)';
+                                ds.pointBackgroundColor = 'rgba(255, 193, 7, 1)';
+                            }
+                        });
+                        // ====================================================
+
                         var aop = {showScale: true, scaleShowGridLines: true, scaleGridLineColor: "rgba(0,0,0,.05)", scaleGridLineWidth: 1, scaleShowHorizontalLines: true, scaleLabel: "<%= value%> kwh", scaleShowVerticalLines: true, bezierCurve: true, bezierCurveTension: 0.3, pointDot: false, pointDotRadius: 4, pointDotStrokeWidth:2, pointHitDetectionRadius: 20, datasetStroke: true, datasetStrokeWidth: 2, datasetFill: false, maintainAspectRatio: false, responsive: true};
+
                         var bop = {scaleBeginAtZero: true, scaleShowGridLines: true, scaleGridLineColor: "rgba(0,0,0,.05)", scaleGridLineWidth: 1, scaleShowHorizontalLines: true, scaleShowVerticalLines: true, scaleLabel: "<%= value%> kwh", barShowStroke: true, barStrokeWidth: 2, barValueSpacing: 5, barDatasetSpacing: 1, responsive: true, maintainAspectRatio: false };
 
-                        // $("#tab1").on("shown.bs.tab", function(e) {
-                            $("#areaChart").remove();
-                            $("#tabItem1").append('<canvas id="areaChart"></canvas>');
-                            var cta = document.getElementById("areaChart").getContext("2d");
-                            var ach = new Chart(cta, {
-                                type: 'line',
-                                data: datas.chartdt,
-                                options: {
-                                    tooltips: {
-                                        callbacks: {
-                                            afterLabel: function(tooltipItem, data) {
-                                                return '(' + datas.meterid[tooltipItem['index']] + ')';
-                                            }
+                        // AREA CHART
+                        $("#areaChart").remove();
+                        $("#tabItem1").append('<canvas id="areaChart"></canvas>');
+                        var cta = document.getElementById("areaChart").getContext("2d");
+
+                        var ach = new Chart(cta, {
+                            type: 'line',
+                            data: datas.chartdt,
+                            options: {
+                                elements: {
+                                    line: {
+                                        fill: true
+                                    }
+                                },
+                                tooltips: {
+                                    callbacks: {
+                                        afterLabel: function(tooltipItem, data) {
+                                            return '(' + datas.meterid[tooltipItem['index']] + ')';
                                         }
                                     }
                                 }
-                            });
+                            }
+                        });
 
-                            $("#legendDiv").empty();
-                            $("#legendDiv").append('<button name="genPDF" id="genPDF" type="button" class="btn btn-primary" onclick="genPDF()"><em class="icon ni ni-download"></em><span>Generate PDF</span></button>');
-                        // });
+                        // BUTTON
+                        $("#legendDiv").empty();
+                        $("#legendDiv").append('<button name="genPDF" id="genPDF" type="button" class="btn btn-primary" onclick="genPDF()"><em class="icon ni ni-download"></em><span>Generate PDF</span></button>');
 
-                        // $("#tab2").on("shown.bs.tab", function(e) {
-                            $("#barChart").remove();
-                            $("#tabItem2").append('<canvas id="barChart"></canvas>');
-                            var ctb = document.getElementById("barChart").getContext("2d");
-                            var bch = new Chart(ctb, {
-                                type: 'bar',
-                                data: datas.chartdt,
-                                options: {
-                                    tooltips: {
-                                        callbacks: {
-                                            afterLabel: function(tooltipItem, data) {
-                                                return '(' + datas.meterid[tooltipItem['index']] + ')';
-                                            }
+                        // BAR CHART
+                        $("#barChart").remove();
+                        $("#tabItem2").append('<canvas id="barChart"></canvas>');
+                        var ctb = document.getElementById("barChart").getContext("2d");
+
+                        var bch = new Chart(ctb, {
+                            type: 'bar',
+                            data: datas.chartdt,
+                            options: {
+                                tooltips: {
+                                    callbacks: {
+                                        afterLabel: function(tooltipItem, data) {
+                                            return '(' + datas.meterid[tooltipItem['index']] + ')';
                                         }
                                     }
                                 }
-                            });
+                            }
+                        });
 
-                            $("#legendDiv").empty();
-                            $("#legendDiv").append('<button name="genPDF" id="genPDF" type="button" class="btn btn-primary" onclick="genPDF()"><em class="icon ni ni-download"></em><span>Generate PDF</span></button>');
+                        // BUTTON (lagi, sesuai script kamu)
+                        $("#legendDiv").empty();
+                        $("#legendDiv").append('<button name="genPDF" id="genPDF" type="button" class="btn btn-primary" onclick="genPDF()"><em class="icon ni ni-download"></em><span>Generate PDF</span></button>');
                         // });
                     }
                 });

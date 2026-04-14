@@ -52,7 +52,7 @@
 	                	<div class="card-inner">
 	                		<div class="table-responsive mt-3">
 	                			<table id="tblOvertime" class="table table-bordered table-striped" role="grid" aria-describedby="tblOvertime_info">
-		                            <thead style="background:#b39d07;">
+		                            <thead style="background:#101924; color: #ffffff;">
 		                                <tr role="row">
 		                                    <th class="sorting_asc text-center" style="width: 40px; vertical-align: middle;">No.</th>
 		                                    <th class="sorting text-center" style="width: 80px; vertical-align: middle;">ID</th>

@@ -9,7 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Fav Icon  -->
     {{-- <link rel="shortcut icon" href="{{ url('/images/logoweb/favicon.ico') }}"> --}}
-    <link rel="shortcut icon" href="{{ url('/images/logoweb/iconweb.ico') }}">
+    <link rel="shortcut icon" href="{{ url('/img/logoweb/iconweb.ico') }}">
     <!-- Page Title  -->
     <title>Login</title>
     <!-- StyleSheets  -->

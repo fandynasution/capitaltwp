@@ -5,7 +5,7 @@
         <title>Capital Place | Log in</title>
 
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-
+        <link rel="shortcut icon" href="{{ url('/images/logoweb/iconweb.ico') }}">
         <!-- CSS -->
         <link href="{{ asset('public/lainnya/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
         <link href="{{ asset('public/lainnya/plugins/font-awesome-4.4.0/css/font-awesome.min.css') }}" rel="stylesheet">

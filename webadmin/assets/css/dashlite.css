@@ -10335,7 +10335,7 @@ body.nav-shown { overflow: hidden; }
 @media (min-width: 768px) { .nk-header-onlymobile { display: none; }
   .nk-header-onlymobile + .nk-content { margin-top: 0; } }
 
-.nk-sidebar { position: fixed; top: 65px; width: 280px; min-height: calc(100vh - 65px); max-height: calc(100vh - 65px); background: #627690; z-index: 700; left: 0; border-right: 1px solid #e5e9f2; transform: translateX(-100%); transition: left 450ms ease, transform 450ms ease; }
+.nk-sidebar { position: fixed; top: 65px; width: 280px; min-height: calc(100vh - 65px); max-height: calc(100vh - 65px); background: #101924; z-index: 700; left: 0; border-right: 1px solid #e5e9f2; transform: translateX(-100%); transition: left 450ms ease, transform 450ms ease; }
 
 .nk-sidebar.is-light { background: #fff; border-right-color: #ebeef2; }
 

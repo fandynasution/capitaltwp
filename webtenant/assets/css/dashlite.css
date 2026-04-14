@@ -10302,7 +10302,7 @@ body.nav-shown { overflow: hidden; }
 
 .nk-sidebar.is-dark { background: #101924; border-right-color: #203247; }
 
-.nk-sidebar.is-capitaltheme { background: #627690; border-right-color: #203247; }
+.nk-sidebar.is-capitaltheme { background: #101924; border-right-color: #203247; }
 
 .nk-sidebar.is-theme { background: #29347a; border-right-color: #3644a0; }
 

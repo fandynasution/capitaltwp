@@ -91,7 +91,7 @@ return [
             'prefix_indexes' => true,
         ],
 
-        // 'WINDASLIVE' => [
+        // 'MPP' => [
         //     'driver' => 'sqlsrv',
         //     'url' => env('DATABASE_URL2'),
         //     'host' => env('DB_HOST2', 'localhost'),
@@ -104,7 +104,7 @@ return [
         //     'prefix_indexes' => true,
         // ],
 
-        'WINDASLIVE' => [
+        'MPP' => [
             'driver' => 'sqlsrv',
             'url' => env('DATABASE_URL2'),
             'host' => env('DB_HOST2'),
